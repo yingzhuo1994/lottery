@@ -40,7 +40,16 @@ public class UserController {
     @ApiOperation(value = "用户信息")
     public ApiResult info(HttpServletRequest request) {
         //TODO
-        return null;
+        HttpSession session = request.getSession();
+        CardUser user = (CardUser) session.getAttribute("user");
+        if (user == null){
+            return new ApiResult(0, "登录超时",null);
+        }else {
+            CardUserDto dto = new CardUserDto(user);
+            dto.setGames(loadService.getGamesNumByUserId(user.getId()));
+            dto.setProducts(loadService.getPrizesNumByUserId(user.getId()));
+            return new ApiResult(1, "成功",dto);
+        }
     }
 
     @GetMapping("/hit/{gameid}/{curpage}/{limit}")
@@ -52,7 +61,16 @@ public class UserController {
     })
     public ApiResult hit(@PathVariable int gameid,@PathVariable int curpage,@PathVariable int limit,HttpServletRequest request) {
         //TODO
-        return null;
+        HttpSession session = request.getSession();
+        CardUser user = (CardUser) session.getAttribute("user");
+        if (user == null){
+            return new ApiResult(0, "登录超时",null);
+        }else {
+            CardUserDto dto = new CardUserDto(user);
+            dto.setGames(loadService.getGamesNumByUserId(user.getId()));
+            dto.setProducts(loadService.getPrizesNumByUserId(user.getId()));
+            return new ApiResult(1, "成功",dto);
+        }
     }
 
 
