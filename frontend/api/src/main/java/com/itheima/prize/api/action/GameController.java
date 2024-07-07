@@ -46,7 +46,28 @@ public class GameController {
     })
     public ApiResult list(@PathVariable int status,@PathVariable int curpage,@PathVariable int limit) {
         //TODO
-        return null;
+        Date now = new Date();
+        QueryWrapper<CardGame> gameQueryWrapper = new QueryWrapper<>();
+        switch (status) {
+            case -1:
+                //查全部
+                break;
+            case 0:
+                //未开始
+                gameQueryWrapper.gt("starttime",now);
+                break;
+            case 1:
+                //进行中
+                gameQueryWrapper.le("starttime",now).gt("endtime",now);
+                break;
+            case 2:
+                //已结束
+                gameQueryWrapper.le("endtime",now);
+                break;
+        }
+        gameQueryWrapper.orderByDesc("starttime");
+        Page<CardGame> page = gameService.page(new Page<>(curpage,limit),gameQueryWrapper);
+        return new ApiResult(1,"成功",new PageBean<CardGame>(page));
     }
 
     @GetMapping("/info/{gameid}")
@@ -56,7 +77,7 @@ public class GameController {
     })
     public ApiResult<CardGame> info(@PathVariable int gameid) {
         //TODO
-        return null;
+        return new ApiResult(1,"成功",gameService.getById(gameid));
     }
 
     @GetMapping("/products/{gameid}")
@@ -66,7 +87,7 @@ public class GameController {
     })
     public ApiResult<List<CardProductDto>> products(@PathVariable int gameid) {
         //TODO
-        return null;
+        return new ApiResult(1,"成功",loadService.getByGameId(gameid));
     }
 
     @GetMapping("/hit/{gameid}/{curpage}/{limit}")
@@ -78,7 +99,10 @@ public class GameController {
     })
     public ApiResult<PageBean<ViewCardUserHit>> hit(@PathVariable int gameid,@PathVariable int curpage,@PathVariable int limit) {
         //TODO
-        return null;
+        QueryWrapper<ViewCardUserHit> wrapper = new QueryWrapper<>();
+        wrapper.eq("gameid",gameid);
+        Page<ViewCardUserHit> page = hitService.page(new Page<ViewCardUserHit>(curpage,limit),wrapper);
+        return new ApiResult(1, "成功",new PageBean<ViewCardUserHit>(page));
     }
 
 
