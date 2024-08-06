@@ -37,10 +37,14 @@ public class GameTask {
 
     @Scheduled(cron = "0 * * * * ?")
     public void execute() {
-        System.out.printf("scheduled!"+new Date());
         //TODO
+        // 获取当前时间的Calendar实例
+        Calendar calendar = Calendar.getInstance();
+        // 清楚毫秒部分
+        calendar.set(Calendar.MILLISECOND, 0);
         //当前时间
-        Date now = new Date();
+        Date now = calendar.getTime();
+        System.out.printf("scheduled!" + now);
         //查询将来1分钟内要开始的活动
         QueryWrapper<CardGame> gameQueryWrapper = new QueryWrapper<>();
         //开始时间大于当前时间
