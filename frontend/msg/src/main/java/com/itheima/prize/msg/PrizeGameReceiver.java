@@ -16,15 +16,15 @@ import org.springframework.stereotype.Component;
 @RabbitListener(queues = RabbitKeys.QUEUE_PLAY)
 public class PrizeGameReceiver {
 
-    private final static Logger logger = LoggerFactory.getLogger(PrizeGameReceiver.class);
+  private static final Logger logger = LoggerFactory.getLogger(PrizeGameReceiver.class);
 
-    @Autowired
-    private CardUserGameService cardUserGameService;
+  @Autowired
+  private CardUserGameService cardUserGameService;
 
-    @RabbitHandler
-    public void processMessage(String message) {
-        logger.info("user play : msg={}" , message);
-        //TODO
-    }
-
+  @RabbitHandler
+  public void processMessage(String message) {
+    logger.info("user play : msg={}", message);
+    //TODO
+    cardUserGameService.save(JSON.parseObject(message, CardUserGame.class));
+  }
 }

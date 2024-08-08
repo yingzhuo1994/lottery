@@ -24,5 +24,6 @@ public class PrizeHitReceiver {
     public void processMessage(String message) {
         logger.info("user hit : message={}", message);
         //TODO
+        hitService.save(JSON.parseObject(message, CardUserHit.class));
     }
 }
